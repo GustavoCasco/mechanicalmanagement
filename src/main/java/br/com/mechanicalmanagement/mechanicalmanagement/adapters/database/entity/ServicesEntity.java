@@ -1,16 +1,14 @@
 package br.com.mechanicalmanagement.mechanicalmanagement.adapters.database.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.util.List;
 
 @Table
 @Builder
 @Setter
+@Getter
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity(name = "tbhg_servicos")

@@ -23,7 +23,7 @@ public class UserEntity {
     @Column(name = "celular")
     private long numberPhone;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "id_acesso")
     private AccessControlEntity accessControlEntity;
 
