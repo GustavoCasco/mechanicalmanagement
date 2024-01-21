@@ -9,17 +9,23 @@ import br.com.mechanicalmanagement.mechanicalmanagement.dtos.ServicesDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.Optional;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
-public class ServicesList {
+public class ServicesImpl {
 
     private final ServicesRepository servicesRepository;
     private final PriceRepository priceRepository;
 
-    public void saveServices(ServicesDTO servicesDTO){
+    public List<ServicesDTO> listAllServices(){
+        return servicesRepository.findAll().parallelStream()
+                .map(this::converterDTOInEntity)
+                .collect(Collectors.toList());
+    }
 
+    public void saveServices(ServicesDTO servicesDTO){
         servicesRepository.findByService(servicesDTO.getService())
                 .ifPresentOrElse(servicesEntity -> {
                     if(servicesDTO.getPrice() != servicesEntity.getPriceEntity().getPrice()){
@@ -36,15 +42,24 @@ public class ServicesList {
                 });
     }
 
-    public void savePriceInTable(boolean existsPrice, double price){
+    private void savePriceInTable(boolean existsPrice, double price){
         if (!existsPrice){
             priceRepository.save(PriceEntity.builder().price(price).build());
         }
     }
 
-    public Optional<PriceEntity> checkPriceExists(double price){
+    private Optional<PriceEntity> checkPriceExists(double price){
         var existsPrice = priceRepository.existsByPrice(price);
         savePriceInTable(existsPrice, price);
         return priceRepository.findByPrice(price);
+    }
+
+
+    private ServicesDTO converterDTOInEntity(ServicesEntity servicesEntity){
+        return ServicesDTO.builder()
+                .service(servicesEntity.getService())
+                .descriptionService(servicesEntity.getDescriptionService())
+                .price(servicesEntity.getPriceEntity().getPrice())
+                .build();
     }
 }
