@@ -22,15 +22,12 @@ public class UserEntity {
     private String userName;
     @Column(name = "celular")
     private long numberPhone;
-
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "id_acesso")
     private AccessControlEntity accessControlEntity;
-
     @OneToOne
     @JoinColumn(name = "id_tipousuario")
     private TypeAccessControlEntity typeAccessControlEntity;
-
     @OneToMany(mappedBy="id_User")
     private List<ServicesEntity> servicesEntities;
 

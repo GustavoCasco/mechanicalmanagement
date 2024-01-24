@@ -4,7 +4,6 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.NoArgsConstructor;
-import org.apache.catalina.User;
 
 @Table
 @Builder
@@ -17,10 +16,8 @@ public class TypeAccessControlEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_tipousuario")
     private long id_TypeUser;
-
     @Column(name = "descricao_tipo_usuario")
     private String descriptionTypeUser;
-
     @OneToOne(mappedBy = "typeAccessControlEntity")
     private UserEntity userEntity;
 }

@@ -20,7 +20,6 @@ public class AccessControlEntity {
     private String secret_pwd;
     @Column(name = "numero_documento")
     private long documentNumber;
-
     @OneToOne(mappedBy = "accessControlEntity")
     private UserEntity userEntity;
 

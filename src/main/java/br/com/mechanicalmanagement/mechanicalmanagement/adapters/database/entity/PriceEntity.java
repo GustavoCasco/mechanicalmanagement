@@ -19,7 +19,6 @@ public class PriceEntity {
     private long id_Price;
     @Column(name = "preco")
     private double price;
-
     @OneToMany(mappedBy="priceEntity")
     private List<ServicesEntity> servicesEntity;
 }

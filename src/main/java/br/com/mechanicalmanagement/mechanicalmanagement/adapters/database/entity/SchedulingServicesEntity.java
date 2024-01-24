@@ -17,13 +17,10 @@ public class SchedulingServicesEntity {
     private long id_Scheduling;
     @Column(name = "id_usuario")
     private long id_User;
-
     @Column(name = "id_servicos")
     private long id_Services;
-
     @Column(name = "datahorarioinicio")
     private long dateHoursStart;
-
     @Column(name = "datahorariofim")
     private long dateHoursEnd;
 }
