@@ -3,6 +3,8 @@ package br.com.mechanicalmanagement.mechanicalmanagement.adapters.database.entit
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.Set;
+
 @Table
 @Builder
 @Setter
@@ -26,4 +28,6 @@ public class ServicesEntity {
     @ManyToOne
     @JoinColumn(name = "id_usuario")
     private UserEntity id_User;
+    @ManyToMany(mappedBy = "servicesEntity")
+    private Set<AppointmentTimesEntity> appointmentTimes;
 }
