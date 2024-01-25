@@ -1,8 +1,8 @@
 package br.com.mechanicalmanagement.mechanicalmanagement.ports.controller;
 
 import br.com.mechanicalmanagement.mechanicalmanagement.dtos.ServicesDTO;
-import br.com.mechanicalmanagement.mechanicalmanagement.usecase.impls.ScheduleImpl;
-import br.com.mechanicalmanagement.mechanicalmanagement.usecase.impls.ServicesImpl;
+import br.com.mechanicalmanagement.mechanicalmanagement.usecase.impls.ScheduleUC;
+import br.com.mechanicalmanagement.mechanicalmanagement.usecase.impls.ServicesUC;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -14,8 +14,8 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ServiceController {
 
-    private final ServicesImpl serviceImpl;
-    private final ScheduleImpl scheduleService;
+    private final ServicesUC serviceImpl;
+    private final ScheduleUC scheduleService;
 
     @PostMapping("/save")
     private ResponseEntity<Object> saveService(@RequestBody ServicesDTO servicesDTO){

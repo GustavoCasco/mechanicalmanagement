@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
-public class UserManagementImpl {
+public class UserManagementUC {
 
     private final UserRepository userRepository;
 

@@ -1,6 +1,5 @@
 package br.com.mechanicalmanagement.mechanicalmanagement.usecase.impls;
 
-import br.com.mechanicalmanagement.mechanicalmanagement.adapters.database.entity.AppointmentTimesEntity;
 import br.com.mechanicalmanagement.mechanicalmanagement.adapters.database.entity.PriceEntity;
 import br.com.mechanicalmanagement.mechanicalmanagement.adapters.database.entity.ServicesEntity;
 import br.com.mechanicalmanagement.mechanicalmanagement.adapters.database.entity.UserEntity;
@@ -11,18 +10,13 @@ import br.com.mechanicalmanagement.mechanicalmanagement.dtos.ServicesDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalTime;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 import java.util.stream.Collectors;
-
-import static org.apache.commons.lang3.StringUtils.leftPad;
 
 @Service
 @RequiredArgsConstructor
-public class ServicesImpl {
+public class ServicesUC {
 
     private final ServicesRepository servicesRepository;
     private final PriceRepository priceRepository;
@@ -63,7 +57,6 @@ public class ServicesImpl {
         return priceRepository.findByPrice(price);
     }
 
-
     private ServicesDTO converterDTOInEntity(ServicesEntity servicesEntity) {
         return ServicesDTO.builder()
                 .service(servicesEntity.getService())
@@ -71,7 +64,4 @@ public class ServicesImpl {
                 .price(servicesEntity.getPriceEntity().getPrice())
                 .build();
     }
-
-
-
 }

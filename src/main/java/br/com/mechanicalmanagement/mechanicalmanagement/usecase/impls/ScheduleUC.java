@@ -5,18 +5,19 @@ import br.com.mechanicalmanagement.mechanicalmanagement.adapters.database.entity
 import br.com.mechanicalmanagement.mechanicalmanagement.adapters.database.repository.AppointmentTimesRepository;
 import br.com.mechanicalmanagement.mechanicalmanagement.adapters.database.repository.ServicesRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalTime;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import static org.apache.commons.lang3.StringUtils.leftPad;
 
 @Service
 @RequiredArgsConstructor
-public class ScheduleImpl {
+public class ScheduleUC {
 
     private final AppointmentTimesRepository appointmentTimesRepository;
     private final ServicesRepository servicesRepository;
@@ -27,27 +28,29 @@ public class ScheduleImpl {
         });
     }
 
+    public List<LocalTime> findAllScheduleAvailable(String serviceName) {
+        return appointmentTimesRepository.findByServicesEntityService(serviceName)
+                .stream().map(AppointmentTimesEntity::getSchedule)
+                .collect(Collectors.toList());
+    }
+
     private Set<AppointmentTimesEntity> createdTableSchedule(LocalTime scheduleEnd, int totalServiceTime, long idService) {
         Set<AppointmentTimesEntity> listAllScheduleForService = new HashSet<>();
-        appointmentTimesRepository.findBySchedule(scheduleEnd)
-                .ifPresentOrElse(listAllScheduleForService::add,
-                        () -> {
-                            int minutosStart = 480;
-                            int minutosEnd = scheduleEnd.getHour() * 60;
-                            int horas = 8;
-                            for (int i = 0; minutosStart + totalServiceTime < minutosEnd; i++) {
-                                int valor = i == 0 ? minutosStart : minutosStart + totalServiceTime;
-                                int time = valor % 60;
-                                horas = (valor - time) / 60;
-                                listAllScheduleForService.add(AppointmentTimesEntity.builder()
-                                        .servicesEntity(ServicesEntity.builder().id_Services(idService).build())
-                                        .schedule(LocalTime.parse(leftPad(String.valueOf(horas), 2, "0")
-                                                .concat(":")
-                                                .concat(leftPad(String.valueOf(time), 2, "0"))))
-                                        .build());
-                                minutosStart = (horas * 60) + time;
-                            }
-                        });
+        int minutesStart = 480;
+        int minutesEnd = scheduleEnd.getHour() * 60;
+        int hours = 8;
+        for (int i = 0; minutesStart + totalServiceTime < minutesEnd; i++) {
+            int valor = i == 0 ? minutesStart : minutesStart + totalServiceTime;
+            int time = valor % 60;
+            hours = (valor - time) / 60;
+            listAllScheduleForService.add(AppointmentTimesEntity.builder()
+                    .servicesEntity(ServicesEntity.builder().id_Services(idService).build())
+                    .schedule(LocalTime.parse(leftPad(String.valueOf(hours), 2, "0")
+                            .concat(":")
+                            .concat(leftPad(String.valueOf(time), 2, "0"))))
+                    .build());
+            minutesStart = (hours * 60) + time;
+        }
         return listAllScheduleForService;
     }
 }

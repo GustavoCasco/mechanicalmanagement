@@ -1,7 +1,7 @@
 package br.com.mechanicalmanagement.mechanicalmanagement.ports.controller;
 
 import br.com.mechanicalmanagement.mechanicalmanagement.dtos.UserDTO;
-import br.com.mechanicalmanagement.mechanicalmanagement.usecase.impls.UserManagementImpl;
+import br.com.mechanicalmanagement.mechanicalmanagement.usecase.impls.UserManagementUC;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class UserController {
 
-    private final UserManagementImpl userManagement;
+    private final UserManagementUC userManagement;
     @PostMapping("/save")
     private ResponseEntity<Object> saveUser(@RequestBody UserDTO servicesDTO){
         userManagement.addingNewUser(servicesDTO);
