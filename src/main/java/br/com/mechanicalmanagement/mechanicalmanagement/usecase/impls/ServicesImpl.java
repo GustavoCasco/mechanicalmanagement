@@ -1,5 +1,6 @@
 package br.com.mechanicalmanagement.mechanicalmanagement.usecase.impls;
 
+import br.com.mechanicalmanagement.mechanicalmanagement.adapters.database.entity.AppointmentTimesEntity;
 import br.com.mechanicalmanagement.mechanicalmanagement.adapters.database.entity.PriceEntity;
 import br.com.mechanicalmanagement.mechanicalmanagement.adapters.database.entity.ServicesEntity;
 import br.com.mechanicalmanagement.mechanicalmanagement.adapters.database.entity.UserEntity;
@@ -8,12 +9,16 @@ import br.com.mechanicalmanagement.mechanicalmanagement.adapters.database.reposi
 import br.com.mechanicalmanagement.mechanicalmanagement.adapters.database.repository.ServicesRepository;
 import br.com.mechanicalmanagement.mechanicalmanagement.dtos.ServicesDTO;
 import lombok.RequiredArgsConstructor;
-import org.springframework.cglib.core.Local;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalTime;
-import java.util.*;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
+
+import static org.apache.commons.lang3.StringUtils.leftPad;
 
 @Service
 @RequiredArgsConstructor
@@ -23,20 +28,16 @@ public class ServicesImpl {
     private final PriceRepository priceRepository;
     private final AppointmentTimesRepository appointmentTimesRepository;
 
-    public List<ServicesDTO> listAllServices(){
+    public List<ServicesDTO> listAllServices() {
         return servicesRepository.findAll().parallelStream()
                 .map(this::converterDTOInEntity)
                 .collect(Collectors.toList());
     }
 
-    public void findSchedules(){
-
-    }
-
-    public void saveServices(ServicesDTO servicesDTO){
+    public void saveServices(ServicesDTO servicesDTO) {
         servicesRepository.findByService(servicesDTO.getService())
                 .ifPresentOrElse(servicesEntity -> {
-                    if(servicesDTO.getPrice() != servicesEntity.getPriceEntity().getPrice()){
+                    if (servicesDTO.getPrice() != servicesEntity.getPriceEntity().getPrice()) {
                         checkPriceExists(servicesDTO.getPrice()).ifPresent(servicesEntity::setPriceEntity);
                         servicesRepository.save(servicesEntity);
                     }
@@ -50,20 +51,20 @@ public class ServicesImpl {
                 });
     }
 
-    private void savePriceInTable(boolean existsPrice, double price){
-        if (!existsPrice){
+    private void savePriceInTable(boolean existsPrice, double price) {
+        if (!existsPrice) {
             priceRepository.save(PriceEntity.builder().price(price).build());
         }
     }
 
-    private Optional<PriceEntity> checkPriceExists(double price){
+    private Optional<PriceEntity> checkPriceExists(double price) {
         var existsPrice = priceRepository.existsByPrice(price);
         savePriceInTable(existsPrice, price);
         return priceRepository.findByPrice(price);
     }
 
 
-    private ServicesDTO converterDTOInEntity(ServicesEntity servicesEntity){
+    private ServicesDTO converterDTOInEntity(ServicesEntity servicesEntity) {
         return ServicesDTO.builder()
                 .service(servicesEntity.getService())
                 .descriptionService(servicesEntity.getDescriptionService())
@@ -71,17 +72,6 @@ public class ServicesImpl {
                 .build();
     }
 
-    private Set<LocalTime> createdTableSchedule(LocalTime schedule, LocalTime totalServiceTime){
-        Set<LocalTime> listAllScheduleForService = new HashSet<>();
-        appointmentTimesRepository.findBySchedule(schedule)
-                .ifPresentOrElse(scheduleService ->{
-                    listAllScheduleForService.add(scheduleService.getSchedule());
-                }, () -> {
-                    Calendar calendar = new GregorianCalendar();
-                    int minutos = (int) (totalServiceTime.getHour() * 60);
-                    calendar.set(Calendar.MINUTE, minutos);
-                    System.out.println("hora: " + calendar.get(Calendar.HOUR_OF_DAY));
-                });
-        return listAllScheduleForService;
-    }
+
+
 }

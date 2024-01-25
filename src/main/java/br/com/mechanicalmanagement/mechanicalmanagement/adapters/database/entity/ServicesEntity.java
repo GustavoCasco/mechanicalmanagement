@@ -28,6 +28,7 @@ public class ServicesEntity {
     @ManyToOne
     @JoinColumn(name = "id_usuario")
     private UserEntity id_User;
-    @ManyToMany(mappedBy = "servicesEntity")
+
+    @OneToMany(mappedBy = "servicesEntity")
     private Set<AppointmentTimesEntity> appointmentTimes;
 }

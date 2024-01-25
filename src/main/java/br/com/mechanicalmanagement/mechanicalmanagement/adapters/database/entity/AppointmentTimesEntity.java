@@ -22,10 +22,7 @@ public class AppointmentTimesEntity {
     private long id_Schedule;
     @Column(name = "horario")
     private LocalTime schedule;
-    @ManyToMany
-    @JoinTable(
-            name = "schedulle_services",
-            joinColumns = @JoinColumn(name = "id_horario"),
-            inverseJoinColumns = @JoinColumn(name = "id_servicos"))
-    private Set<ServicesEntity> servicesEntity;
+    @ManyToOne
+    @JoinColumn(name = "id_servicos")
+    private ServicesEntity servicesEntity;
 }
