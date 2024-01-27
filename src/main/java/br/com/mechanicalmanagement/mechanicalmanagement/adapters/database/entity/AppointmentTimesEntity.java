@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalTime;
+import java.util.List;
 
 @Table
 @Builder
@@ -22,10 +23,9 @@ public class AppointmentTimesEntity {
     private LocalTime schedule;
     @Column(name = "tempoatendimento")
     private int serviceTime;
-
     @ManyToOne
     @JoinColumn(name = "id_servicos")
     private ServicesEntity servicesEntity;
-    @OneToOne(mappedBy = "timetable")
-    private SchedulingServicesEntity schedulingServicesEntity;
+    @OneToMany(mappedBy = "timetable")
+    private List<SchedulingServicesEntity> schedulingServicesEntity;
 }

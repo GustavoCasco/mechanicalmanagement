@@ -33,8 +33,7 @@ public class AppointmentTimesUC {
     }
 
     public AppointmentTimesEntity findByHoursAndService(Long id_Service, LocalTime hours){
-            return appointmentTimesRepository.findByServicesEntityIdServicesAndSchedule(id_Service,
-                hours).get();
+            return appointmentTimesRepository.findHoursByService(id_Service, hours).get(0);
     }
 
     public List<LocalTime> findAllScheduleAvailable(String serviceName, LocalDate dateSchedule) {
@@ -49,13 +48,17 @@ public class AppointmentTimesUC {
                 .sorted(LocalTime::compareTo)
                 .forEach(appointmentTime -> {
                     timeControl.put(count, appointmentTime);
-                    listScheduleForDate.forEach(schedule -> {
-                        if ((timeControl.get(count == 0 ? 0 : count - 1).isBefore(schedule.getTimetable().getSchedule())
-                                && appointmentTime.getHour() < schedule.getTimetable().getSchedule().getHour())
-                                != appointmentTime.isAfter(schedule.getTimetable().getSchedule())){
-                            filteredListAccordingAvailability.add(appointmentTime);
-                        }
-                    });
+                    if (!listScheduleForDate.isEmpty()){
+                        listScheduleForDate.forEach(schedule -> {
+                            if ((timeControl.get(count == 0 ? 0 : count - 1).isBefore(schedule.getTimetable().getSchedule())
+                                    && appointmentTime.getHour() < schedule.getTimetable().getSchedule().getHour())
+                                    != appointmentTime.isAfter(schedule.getTimetable().getSchedule())){
+                                filteredListAccordingAvailability.add(appointmentTime);
+                            }
+                        });
+                    }else {
+                        filteredListAccordingAvailability.add(appointmentTime);
+                    }
                     count++;
                 });
         return filteredListAccordingAvailability;

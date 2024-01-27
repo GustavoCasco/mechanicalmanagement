@@ -27,7 +27,7 @@ public class SchedulingServicesEntity {
     @Column(name = "id_servicos")
     private long id_Services;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "id_horario")
     private AppointmentTimesEntity timetable;
 }
