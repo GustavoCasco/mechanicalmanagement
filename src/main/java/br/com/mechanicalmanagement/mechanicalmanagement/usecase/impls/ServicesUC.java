@@ -37,7 +37,7 @@ public class ServicesUC {
                     }
                 }, () -> {
                     ServicesEntity servicesEntity = new ServicesEntity();
-                    servicesEntity.setId_User(UserEntity.builder().id_User(2L).build());
+                    servicesEntity.setId_User(UserEntity.builder().id_User(servicesDTO.getIdUserResponse()).build());
                     checkPriceExists(servicesDTO.getPrice()).ifPresent(servicesEntity::setPriceEntity);
                     servicesEntity.setDescriptionService(servicesDTO.getDescriptionService());
                     servicesEntity.setService(servicesDTO.getService());

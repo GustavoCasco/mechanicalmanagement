@@ -19,4 +19,5 @@ public class ServicesDTO {
     private LocalTime scheduleEnd;
     private int totalServiceTime;
     private double price;
+    private long idUserResponse;
 }
