@@ -33,7 +33,7 @@ public class AppointmentTimesUC {
     }
 
     public AppointmentTimesEntity findByHoursAndService(Long id_Service, LocalTime hours){
-            return appointmentTimesRepository.findHoursByService(id_Service, hours).get(0);
+            return appointmentTimesRepository.findByServicesEntityIdServicesAndSchedule(id_Service, hours).get();
     }
 
     public List<LocalTime> findAllScheduleAvailable(String serviceName, LocalDate dateSchedule) {
