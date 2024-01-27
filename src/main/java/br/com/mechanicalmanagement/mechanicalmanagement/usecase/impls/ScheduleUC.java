@@ -1,6 +1,5 @@
 package br.com.mechanicalmanagement.mechanicalmanagement.usecase.impls;
 
-import br.com.mechanicalmanagement.mechanicalmanagement.adapters.database.entity.AppointmentTimesEntity;
 import br.com.mechanicalmanagement.mechanicalmanagement.adapters.database.entity.SchedulingServicesEntity;
 import br.com.mechanicalmanagement.mechanicalmanagement.adapters.database.repository.SchedulingServicesRepository;
 import br.com.mechanicalmanagement.mechanicalmanagement.dtos.ScheduleDTO;
