@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.sql.Date;
+import java.time.LocalDate;
 import java.util.List;
 
 @RestController
@@ -27,7 +28,7 @@ public class ServiceController {
     }
 
     @GetMapping("/listall")
-    private ResponseEntity<List<ServicesDTO>> listAllServices(@RequestParam Date dateSearch){
+    private ResponseEntity<List<ServicesDTO>> listAllServices(@RequestParam LocalDate dateSearch){
         return ResponseEntity.ok(serviceImpl.listAllServices(dateSearch));
     }
 }

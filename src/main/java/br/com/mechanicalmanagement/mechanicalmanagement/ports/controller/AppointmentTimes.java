@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.sql.Date;
+import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
 
@@ -23,7 +24,7 @@ public class AppointmentTimes {
 
     @GetMapping("/listAppointmentTimeForService")
     private ResponseEntity<List<LocalTime>> listAllAppointmentTimes(@RequestParam String serviceName,
-                                                                    @RequestParam Date dateSchedule){
+                                                                    @RequestParam LocalDate dateSchedule){
         var listAllScheduleForService = appointmentTimesUC.findAllScheduleAvailable(serviceName, dateSchedule);
         return ok(listAllScheduleForService);
     }

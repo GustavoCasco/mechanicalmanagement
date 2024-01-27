@@ -8,7 +8,7 @@ import org.springframework.stereotype.Repository;
 import java.util.Optional;
 
 @Repository
-public interface ServicesRepository extends CrudRepository<ServicesEntity, Long> {
+public interface ServicesRepository extends JpaRepository<ServicesEntity, Long> {
 
     Optional<ServicesEntity> findByService(String service);
 }

@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.sql.Date;
+import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.*;
 
@@ -36,7 +37,7 @@ public class AppointmentTimesUC {
                 hours).get();
     }
 
-    public List<LocalTime> findAllScheduleAvailable(String serviceName, Date dateSchedule) {
+    public List<LocalTime> findAllScheduleAvailable(String serviceName, LocalDate dateSchedule) {
         count = 0;
         timeControl =  new HashMap<>();
         filteredListAccordingAvailability = new ArrayList<>();

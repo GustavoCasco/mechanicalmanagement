@@ -8,7 +8,7 @@ import org.springframework.stereotype.Repository;
 import java.util.Optional;
 
 @Repository
-public interface PriceRepository extends CrudRepository<PriceEntity, Long> {
+public interface PriceRepository extends JpaRepository<PriceEntity, Long> {
 
     boolean existsByPrice(double price);
 

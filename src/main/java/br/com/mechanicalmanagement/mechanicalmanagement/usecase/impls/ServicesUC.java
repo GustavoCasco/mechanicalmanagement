@@ -9,7 +9,7 @@ import br.com.mechanicalmanagement.mechanicalmanagement.dtos.ServicesDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.sql.Date;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -22,7 +22,7 @@ public class ServicesUC {
     private final PriceRepository priceRepository;
     private final AppointmentTimesUC appointmentTimesUC;
 
-    public List<ServicesDTO> listAllServices(Date dateSearch) {
+    public List<ServicesDTO> listAllServices(LocalDate dateSearch) {
         return servicesRepository.findAll().stream()
                 .map(x -> this.converterDTOInEntity(x, dateSearch))
                 .collect(Collectors.toList());
@@ -57,7 +57,7 @@ public class ServicesUC {
         return priceRepository.findByPrice(price);
     }
 
-    private ServicesDTO converterDTOInEntity(ServicesEntity servicesEntity, Date dateSearch) {
+    private ServicesDTO converterDTOInEntity(ServicesEntity servicesEntity, LocalDate dateSearch) {
 
         return ServicesDTO.builder()
                 .id_service(servicesEntity.getIdServices())
