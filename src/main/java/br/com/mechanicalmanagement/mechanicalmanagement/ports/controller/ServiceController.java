@@ -22,7 +22,7 @@ public class ServiceController {
     private ResponseEntity<Object> saveService(@RequestBody ServicesDTO servicesDTO){
         serviceImpl.saveServices(servicesDTO);
         //TODO: BUG* Verificar se já existe horario para tal service, caso sim, não inserir novamente
-        scheduleService.saveAppointmentTimes(servicesDTO.getService(), servicesDTO.getScheduleEnd(), servicesDTO.getTotalServiceTime());
+        scheduleService.saveAppointmentTimes(servicesDTO.service(), servicesDTO.scheduleEnd(), servicesDTO.totalServiceTime());
         return ResponseEntity.ok("Sucesso");
     }
 

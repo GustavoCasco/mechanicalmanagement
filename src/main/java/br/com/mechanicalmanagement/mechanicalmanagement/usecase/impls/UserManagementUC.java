@@ -16,7 +16,7 @@ public class UserManagementUC {
 
     public void addingNewUser(UserDTO userDTO) {
 
-        var isUserExists = userRepository.findByAccessControlEntityDocumentNumber(userDTO.getDocumentNumber());
+        var isUserExists = userRepository.findByAccessControlEntityDocumentNumber(userDTO.documentNumber());
 
         if (isUserExists.isPresent()) {
             //TODO: colocar uma exception com retorno 400 bad request mensagem: usuario existente
@@ -25,15 +25,15 @@ public class UserManagementUC {
 
         userRepository.save(UserEntity.builder()
                 .accessControlEntity(AccessControlEntity.builder()
-                        .secret_pwd(userDTO.getSecret_pwd())
-                        .email(userDTO.getEmail())
-                        .documentNumber(userDTO.getDocumentNumber())
+                        .secret_pwd(userDTO.secret_pwd())
+                        .email(userDTO.email())
+                        .documentNumber(userDTO.documentNumber())
                         .build())
-                .userName(userDTO.getUserName())
+                .userName(userDTO.userName())
                 .typeAccessControlEntity(TypeAccessControlEntity.builder()
                         .idTypeUser(1)
                         .build())
-                .numberPhone(userDTO.getNumberPhone())
+                .numberPhone(userDTO.numberPhone())
                 .build());
     }
 }

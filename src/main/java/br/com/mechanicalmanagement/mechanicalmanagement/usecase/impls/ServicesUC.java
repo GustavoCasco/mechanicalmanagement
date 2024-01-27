@@ -29,18 +29,18 @@ public class ServicesUC {
     }
 
     public void saveServices(ServicesDTO servicesDTO) {
-        servicesRepository.findByService(servicesDTO.getService())
+        servicesRepository.findByService(servicesDTO.service())
                 .ifPresentOrElse(servicesEntity -> {
-                    if (servicesDTO.getPrice() != servicesEntity.getPriceEntity().getPrice()) {
-                        checkPriceExists(servicesDTO.getPrice()).ifPresent(servicesEntity::setPriceEntity);
+                    if (servicesDTO.price() != servicesEntity.getPriceEntity().getPrice()) {
+                        checkPriceExists(servicesDTO.price()).ifPresent(servicesEntity::setPriceEntity);
                         servicesRepository.save(servicesEntity);
                     }
                 }, () -> {
                     ServicesEntity servicesEntity = new ServicesEntity();
-                    servicesEntity.setId_User(UserEntity.builder().idUser(servicesDTO.getIdUserResponse()).build());
-                    checkPriceExists(servicesDTO.getPrice()).ifPresent(servicesEntity::setPriceEntity);
-                    servicesEntity.setDescriptionService(servicesDTO.getDescriptionService());
-                    servicesEntity.setService(servicesDTO.getService());
+                    servicesEntity.setId_User(UserEntity.builder().idUser(servicesDTO.idUserResponse()).build());
+                    checkPriceExists(servicesDTO.price()).ifPresent(servicesEntity::setPriceEntity);
+                    servicesEntity.setDescriptionService(servicesDTO.descriptionService());
+                    servicesEntity.setService(servicesDTO.service());
                     servicesRepository.save(servicesEntity);
                 });
     }
@@ -59,14 +59,13 @@ public class ServicesUC {
 
     private ServicesDTO converterDTOInEntity(ServicesEntity servicesEntity, LocalDate dateSearch) {
 
-        return ServicesDTO.builder()
-                .id_service(servicesEntity.getIdServices())
-                .service(servicesEntity.getService())
-                .descriptionService(servicesEntity.getDescriptionService())
-                .price(servicesEntity.getPriceEntity().getPrice())
-                .idUserResponse(servicesEntity.getId_User().getIdUser())
-                .totalServiceTime(servicesEntity.getAppointmentTimes().stream().findFirst().get().getServiceTime())
-                .listAppointmentTimeAvailable(appointmentTimesUC.findAllScheduleAvailable(servicesEntity.getService(), dateSearch))
-                .build();
+        return new ServicesDTO(servicesEntity.getIdServices(),
+                servicesEntity.getService(),
+                servicesEntity.getDescriptionService(),
+                null,
+                servicesEntity.getAppointmentTimes().stream().findFirst().get().getServiceTime(),
+                servicesEntity.getPriceEntity().getPrice(),
+                servicesEntity.getId_User().getIdUser(),
+                appointmentTimesUC.findAllScheduleAvailable(servicesEntity.getService(), dateSearch));
     }
 }

@@ -6,12 +6,9 @@ import lombok.Getter;
 import java.time.LocalDate;
 import java.time.LocalTime;
 
-@Getter
-@Builder
-public class ScheduleDTO {
 
-    private LocalDate dateSchedule;
-    private long id_User;
-    private long id_Service;
-    private LocalTime schedule;
+public record ScheduleDTO(LocalDate dateSchedule,
+                          long id_User,
+                          long id_Service,
+                          LocalTime schedule) {
 }

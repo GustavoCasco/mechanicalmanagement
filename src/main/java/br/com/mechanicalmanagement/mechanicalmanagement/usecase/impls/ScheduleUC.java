@@ -13,11 +13,11 @@ public class ScheduleUC {
     private final AppointmentTimesUC appointmentTimesUC;
 
     public void saveSchedule(ScheduleDTO scheduleDTO){
-        var a = appointmentTimesUC.findByHoursAndService(scheduleDTO.getId_Service(), scheduleDTO.getSchedule());
+        var a = appointmentTimesUC.findByHoursAndService(scheduleDTO.id_Service(), scheduleDTO.schedule());
         schedulingServicesRepository.save(SchedulingServicesEntity.builder()
-                        .dateSchedule(scheduleDTO.getDateSchedule())
-                        .id_User(scheduleDTO.getId_User())
-                        .id_Services(scheduleDTO.getId_Service())
+                        .dateSchedule(scheduleDTO.dateSchedule())
+                        .id_User(scheduleDTO.id_User())
+                        .id_Services(scheduleDTO.id_Service())
                         .timetable(a)
                 .build());
     }
