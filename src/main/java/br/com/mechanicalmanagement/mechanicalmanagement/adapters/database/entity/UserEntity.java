@@ -3,12 +3,14 @@ package br.com.mechanicalmanagement.mechanicalmanagement.adapters.database.entit
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.util.List;
 
 @Table
 @Builder
+@Getter
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity(name = "tbhg_usuario")
@@ -17,7 +19,7 @@ public class UserEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_usuario")
-    private long id_User;
+    private long idUser;
     @Column(name = "nome")
     private String userName;
     @Column(name = "celular")

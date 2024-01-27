@@ -31,7 +31,7 @@ public class UserManagementUC {
                         .build())
                 .userName(userDTO.getUserName())
                 .typeAccessControlEntity(TypeAccessControlEntity.builder()
-                        .id_TypeUser(1)
+                        .idTypeUser(1)
                         .build())
                 .numberPhone(userDTO.getNumberPhone())
                 .build());

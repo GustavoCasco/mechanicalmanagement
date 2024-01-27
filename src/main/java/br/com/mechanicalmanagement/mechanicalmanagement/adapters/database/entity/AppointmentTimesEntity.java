@@ -17,7 +17,7 @@ public class AppointmentTimesEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_horario")
-    private long id_Schedule;
+    private long idSchedule;
     @Column(name = "horario")
     private LocalTime schedule;
     @Column(name = "tempoatendimento")

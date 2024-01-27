@@ -14,7 +14,7 @@ public class AccessControlEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_acesso")
-    private long id_Access;
+    private long idAccess;
     private String email;
     @Column(name = "palavra_chave")
     private String secret_pwd;

@@ -16,7 +16,7 @@ public class PriceEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_preco")
-    private long id_Price;
+    private long idPrice;
     @Column(name = "preco")
     private double price;
     @OneToMany(mappedBy="priceEntity")

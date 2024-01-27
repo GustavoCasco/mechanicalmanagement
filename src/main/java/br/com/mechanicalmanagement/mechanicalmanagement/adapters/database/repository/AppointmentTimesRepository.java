@@ -4,10 +4,13 @@ import br.com.mechanicalmanagement.mechanicalmanagement.adapters.database.entity
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalTime;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface AppointmentTimesRepository extends CrudRepository<AppointmentTimesEntity, Long> {
 
     List<AppointmentTimesEntity> findByServicesEntityService(String scheduleName);
+    Optional<AppointmentTimesEntity> findByServicesEntityIdServicesAndSchedule(Long id_Services, LocalTime schedule);
 }

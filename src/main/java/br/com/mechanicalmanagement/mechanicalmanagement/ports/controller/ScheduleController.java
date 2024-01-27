@@ -1,30 +1,24 @@
 package br.com.mechanicalmanagement.mechanicalmanagement.ports.controller;
 
-import br.com.mechanicalmanagement.mechanicalmanagement.usecase.impls.AppointmentTimesUC;
+import br.com.mechanicalmanagement.mechanicalmanagement.dtos.ScheduleDTO;
+import br.com.mechanicalmanagement.mechanicalmanagement.usecase.impls.ScheduleUC;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
-
-import java.sql.Date;
-import java.time.LocalTime;
-import java.util.List;
+import org.springframework.web.bind.annotation.*;
 
 import static org.springframework.http.ResponseEntity.ok;
 
 @RestController
-@RequestMapping(value = "/appointmentTimes")
+@RequestMapping(value = "/schedule")
 @RequiredArgsConstructor
 public class ScheduleController {
 
-    private final AppointmentTimesUC scheduleImpl;
+    private final ScheduleUC scheduleImpl;
 
-    @GetMapping("/listAppointmentTimeForService")
-    private ResponseEntity<List<LocalTime>> listAllAppointmentTimes(@RequestParam String serviceName,
-                                                                    @RequestParam Date dateSchedule){
-        var listAllScheduleForService = scheduleImpl.findAllScheduleAvailable(serviceName, dateSchedule);
-        return ok(listAllScheduleForService);
+    //TODO: FAZER VALIDAÇÃO PARA CASO JÁ EXISTA O AGENDAMENTO NAQUELA HORA
+    @PostMapping("/saveSchedule")
+    private ResponseEntity<String> saveSchedule(@RequestBody ScheduleDTO scheduleDTO){
+        scheduleImpl.saveSchedule(scheduleDTO);
+        return ok("Sucesso");
     }
 }

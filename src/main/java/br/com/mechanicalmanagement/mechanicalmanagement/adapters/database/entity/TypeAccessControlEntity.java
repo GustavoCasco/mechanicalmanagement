@@ -15,7 +15,7 @@ public class TypeAccessControlEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_tipousuario")
-    private long id_TypeUser;
+    private long idTypeUser;
     @Column(name = "descricao_tipo_usuario")
     private String descriptionTypeUser;
     @OneToOne(mappedBy = "typeAccessControlEntity")

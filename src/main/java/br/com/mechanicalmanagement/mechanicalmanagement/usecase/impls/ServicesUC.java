@@ -3,13 +3,13 @@ package br.com.mechanicalmanagement.mechanicalmanagement.usecase.impls;
 import br.com.mechanicalmanagement.mechanicalmanagement.adapters.database.entity.PriceEntity;
 import br.com.mechanicalmanagement.mechanicalmanagement.adapters.database.entity.ServicesEntity;
 import br.com.mechanicalmanagement.mechanicalmanagement.adapters.database.entity.UserEntity;
-import br.com.mechanicalmanagement.mechanicalmanagement.adapters.database.repository.AppointmentTimesRepository;
 import br.com.mechanicalmanagement.mechanicalmanagement.adapters.database.repository.PriceRepository;
 import br.com.mechanicalmanagement.mechanicalmanagement.adapters.database.repository.ServicesRepository;
 import br.com.mechanicalmanagement.mechanicalmanagement.dtos.ServicesDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.sql.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -20,11 +20,11 @@ public class ServicesUC {
 
     private final ServicesRepository servicesRepository;
     private final PriceRepository priceRepository;
-    private final AppointmentTimesRepository appointmentTimesRepository;
+    private final AppointmentTimesUC appointmentTimesUC;
 
-    public List<ServicesDTO> listAllServices() {
-        return servicesRepository.findAll().parallelStream()
-                .map(this::converterDTOInEntity)
+    public List<ServicesDTO> listAllServices(Date dateSearch) {
+        return servicesRepository.findAll().stream()
+                .map(x -> this.converterDTOInEntity(x, dateSearch))
                 .collect(Collectors.toList());
     }
 
@@ -37,7 +37,7 @@ public class ServicesUC {
                     }
                 }, () -> {
                     ServicesEntity servicesEntity = new ServicesEntity();
-                    servicesEntity.setId_User(UserEntity.builder().id_User(servicesDTO.getIdUserResponse()).build());
+                    servicesEntity.setId_User(UserEntity.builder().idUser(servicesDTO.getIdUserResponse()).build());
                     checkPriceExists(servicesDTO.getPrice()).ifPresent(servicesEntity::setPriceEntity);
                     servicesEntity.setDescriptionService(servicesDTO.getDescriptionService());
                     servicesEntity.setService(servicesDTO.getService());
@@ -57,11 +57,16 @@ public class ServicesUC {
         return priceRepository.findByPrice(price);
     }
 
-    private ServicesDTO converterDTOInEntity(ServicesEntity servicesEntity) {
+    private ServicesDTO converterDTOInEntity(ServicesEntity servicesEntity, Date dateSearch) {
+
         return ServicesDTO.builder()
+                .id_service(servicesEntity.getIdServices())
                 .service(servicesEntity.getService())
                 .descriptionService(servicesEntity.getDescriptionService())
                 .price(servicesEntity.getPriceEntity().getPrice())
+                .idUserResponse(servicesEntity.getId_User().getIdUser())
+                .totalServiceTime(servicesEntity.getAppointmentTimes().stream().findFirst().get().getServiceTime())
+                .listAppointmentTimeAvailable(appointmentTimesUC.findAllScheduleAvailable(servicesEntity.getService(), dateSearch))
                 .build();
     }
 }

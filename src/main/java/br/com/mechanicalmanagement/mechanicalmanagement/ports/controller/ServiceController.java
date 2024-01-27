@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.sql.Date;
 import java.util.List;
 
 @RestController
@@ -20,12 +21,13 @@ public class ServiceController {
     @PostMapping("/save")
     private ResponseEntity<Object> saveService(@RequestBody ServicesDTO servicesDTO){
         serviceImpl.saveServices(servicesDTO);
+        //TODO: BUG* Verificar se já existe horario para tal service, caso sim, não inserir novamente
         scheduleService.saveAppointmentTimes(servicesDTO.getService(), servicesDTO.getScheduleEnd(), servicesDTO.getTotalServiceTime());
         return ResponseEntity.ok("Sucesso");
     }
 
     @GetMapping("/listall")
-    private ResponseEntity<List<ServicesDTO>> listAllServices(){
-        return ResponseEntity.ok(serviceImpl.listAllServices());
+    private ResponseEntity<List<ServicesDTO>> listAllServices(@RequestParam Date dateSearch){
+        return ResponseEntity.ok(serviceImpl.listAllServices(dateSearch));
     }
 }

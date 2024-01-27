@@ -21,18 +21,26 @@ public class AppointmentTimesUC {
     private final AppointmentTimesRepository appointmentTimesRepository;
     private final ServicesRepository servicesRepository;
     private final SchedulingServicesRepository schedulingServicesRepository;
-    private final HashMap<Integer, LocalTime> timeControl =  new HashMap<>();
-    private final List<LocalTime> filteredListAccordingAvailability = new ArrayList<>();
+    private HashMap<Integer, LocalTime> timeControl;
+    private List<LocalTime> filteredListAccordingAvailability;
     private int count = 0;
 
     public void saveAppointmentTimes(String serviceName, LocalTime scheduleEnd, int totalServiceTime) {
         servicesRepository.findByService(serviceName).ifPresent(service -> {
-            appointmentTimesRepository.saveAll(createdTableSchedule(scheduleEnd, totalServiceTime, service.getId_Services()));
+            appointmentTimesRepository.saveAll(createdTableSchedule(scheduleEnd, totalServiceTime, service.getIdServices()));
         });
+    }
+
+    public AppointmentTimesEntity findByHoursAndService(Long id_Service, LocalTime hours){
+            return appointmentTimesRepository.findByServicesEntityIdServicesAndSchedule(id_Service,
+                hours).get();
     }
 
     public List<LocalTime> findAllScheduleAvailable(String serviceName, Date dateSchedule) {
         count = 0;
+        timeControl =  new HashMap<>();
+        filteredListAccordingAvailability = new ArrayList<>();
+
         var listScheduleForDate = schedulingServicesRepository.findByDateSchedule(dateSchedule);
         appointmentTimesRepository.findByServicesEntityService(serviceName)
                 .stream()
@@ -62,7 +70,7 @@ public class AppointmentTimesUC {
             int time = valor % 60;
             hours = (valor - time) / 60;
             listAllScheduleForService.add(AppointmentTimesEntity.builder()
-                    .servicesEntity(ServicesEntity.builder().id_Services(idService).build())
+                    .servicesEntity(ServicesEntity.builder().idServices(idService).build())
                             .serviceTime(totalServiceTime)
                     .schedule(LocalTime.parse(leftPad(String.valueOf(hours), 2, "0")
                             .concat(":")

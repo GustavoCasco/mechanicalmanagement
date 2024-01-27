@@ -7,6 +7,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.sql.Date;
+import java.time.LocalDate;
 
 @Table
 @Builder
@@ -18,10 +19,10 @@ public class SchedulingServicesEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_agendamentos")
-    private long id_Scheduling;
+    private long idScheduling;
 
     @Column(name = "dataagendamento")
-    private Date dateSchedule;
+    private LocalDate dateSchedule;
 
     @Column(name = "id_usuario")
     private long id_User;
