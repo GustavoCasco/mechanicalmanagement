@@ -22,13 +22,13 @@ public class ServicesEntity {
     private String service;
     @Column(name = "descricaoservico")
     private String descriptionService;
+
     @ManyToOne
     @JoinColumn(name = "id_preco")
     private PriceEntity priceEntity;
     @ManyToOne
     @JoinColumn(name = "id_usuario")
     private UserEntity id_User;
-
     @OneToMany(mappedBy = "servicesEntity")
     private Set<AppointmentTimesEntity> appointmentTimes;
 }

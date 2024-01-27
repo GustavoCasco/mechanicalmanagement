@@ -20,13 +20,10 @@ public class SchedulingServicesEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_agendamentos")
     private long idScheduling;
-
     @Column(name = "dataagendamento")
     private LocalDate dateSchedule;
-
     @Column(name = "id_usuario")
     private long id_User;
-
     @Column(name = "id_servicos")
     private long id_Services;
 
