@@ -10,7 +10,6 @@ import java.util.Optional;
 
 @Repository
 public interface AppointmentTimesRepository extends JpaRepository<AppointmentTimesEntity, Long> {
-
     List<AppointmentTimesEntity> findByServicesEntityService(String scheduleName);
     Optional<AppointmentTimesEntity> findByServicesEntityIdServicesAndSchedule(Long id_Services, LocalTime schedule);
 }

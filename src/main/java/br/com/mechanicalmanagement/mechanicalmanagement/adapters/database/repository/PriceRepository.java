@@ -8,8 +8,6 @@ import java.util.Optional;
 
 @Repository
 public interface PriceRepository extends JpaRepository<PriceEntity, Long> {
-
     boolean existsByPrice(double price);
-
     Optional<PriceEntity> findByPrice(double price);
 }

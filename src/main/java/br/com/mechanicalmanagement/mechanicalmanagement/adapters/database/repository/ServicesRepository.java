@@ -8,6 +8,5 @@ import java.util.Optional;
 
 @Repository
 public interface ServicesRepository extends JpaRepository<ServicesEntity, Long> {
-
     Optional<ServicesEntity> findByService(String service);
 }

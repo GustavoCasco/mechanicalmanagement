@@ -9,6 +9,5 @@ import java.util.List;
 
 @Repository
 public interface SchedulingServicesRepository extends JpaRepository<SchedulingServicesEntity, Long> {
-
     List<SchedulingServicesEntity> findByDateSchedule(LocalDate dateSchedule);
 }
