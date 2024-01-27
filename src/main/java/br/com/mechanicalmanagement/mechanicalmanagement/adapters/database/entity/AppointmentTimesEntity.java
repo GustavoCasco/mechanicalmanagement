@@ -3,9 +3,7 @@ package br.com.mechanicalmanagement.mechanicalmanagement.adapters.database.entit
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.time.LocalDate;
 import java.time.LocalTime;
-import java.util.Set;
 
 @Table
 @Builder
@@ -27,4 +25,7 @@ public class AppointmentTimesEntity {
     @ManyToOne
     @JoinColumn(name = "id_servicos")
     private ServicesEntity servicesEntity;
+
+    @OneToOne(mappedBy = "timetable")
+    private SchedulingServicesEntity schedulingServicesEntity;
 }

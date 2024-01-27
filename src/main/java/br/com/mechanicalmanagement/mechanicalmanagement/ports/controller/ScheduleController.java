@@ -25,7 +25,7 @@ public class ScheduleController {
     private ResponseEntity<List<LocalTime>> listAllAppointmentTimes(@RequestParam String serviceName,
                                                                     @RequestParam Date dateSchedule){
         var listAllScheduleForService = scheduleImpl.findAllScheduleAvailable(serviceName, dateSchedule);
-        listAllScheduleForService.sort(LocalTime::compareTo);
+
         return ok(listAllScheduleForService);
     }
 }

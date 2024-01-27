@@ -10,10 +10,7 @@ import org.springframework.stereotype.Service;
 
 import java.sql.Date;
 import java.time.LocalTime;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
+import java.util.*;
 
 import static org.apache.commons.lang3.StringUtils.leftPad;
 
@@ -24,6 +21,9 @@ public class AppointmentTimesUC {
     private final AppointmentTimesRepository appointmentTimesRepository;
     private final ServicesRepository servicesRepository;
     private final SchedulingServicesRepository schedulingServicesRepository;
+    private final HashMap<Integer, LocalTime> timeControl =  new HashMap<>();
+    private final List<LocalTime> filteredListAccordingAvailability = new ArrayList<>();
+    private int count = 0;
 
     public void saveAppointmentTimes(String serviceName, LocalTime scheduleEnd, int totalServiceTime) {
         servicesRepository.findByService(serviceName).ifPresent(service -> {
@@ -32,13 +32,24 @@ public class AppointmentTimesUC {
     }
 
     public List<LocalTime> findAllScheduleAvailable(String serviceName, Date dateSchedule) {
-        var a = schedulingServicesRepository.findByDateSchedule(dateSchedule);
-
-        //TODO: PEGAR OBJETO DE AGENDAMENTO E FAZER A SEGUINTE VALIDAÇÃO:
-        // VERIFICAR SE OS HORARIOS DISPONIVEIS ESTÃO ENTRE O TERMINO E O INICIO DO AGENDAMENTO CASO SIM, REMOVER ESSE HORARIO
-        return appointmentTimesRepository.findByServicesEntityService(serviceName)
-                .stream().map(AppointmentTimesEntity::getSchedule)
-                .collect(Collectors.toList());
+        count = 0;
+        var listScheduleForDate = schedulingServicesRepository.findByDateSchedule(dateSchedule);
+        appointmentTimesRepository.findByServicesEntityService(serviceName)
+                .stream()
+                .map(AppointmentTimesEntity::getSchedule)
+                .sorted(LocalTime::compareTo)
+                .forEach(appointmentTime -> {
+                    timeControl.put(count, appointmentTime);
+                    listScheduleForDate.forEach(schedule -> {
+                        if ((timeControl.get(count == 0 ? 0 : count - 1).isBefore(schedule.getTimetable().getSchedule())
+                                && appointmentTime.getHour() < schedule.getTimetable().getSchedule().getHour())
+                                != appointmentTime.isAfter(schedule.getTimetable().getSchedule())){
+                            filteredListAccordingAvailability.add(appointmentTime);
+                        }
+                    });
+                    count++;
+                });
+        return filteredListAccordingAvailability;
     }
 
     private Set<AppointmentTimesEntity> createdTableSchedule(LocalTime scheduleEnd, int totalServiceTime, long idService) {

@@ -3,12 +3,14 @@ package br.com.mechanicalmanagement.mechanicalmanagement.adapters.database.entit
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.sql.Date;
 
 @Table
 @Builder
+@Getter
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity(name = "tbhg_agendamentos")
@@ -27,6 +29,7 @@ public class SchedulingServicesEntity {
     @Column(name = "id_servicos")
     private long id_Services;
 
-    @Column(name = "id_horario")
-    private long id_timetable;
+    @OneToOne
+    @JoinColumn(name = "id_horario")
+    private AppointmentTimesEntity timetable;
 }
