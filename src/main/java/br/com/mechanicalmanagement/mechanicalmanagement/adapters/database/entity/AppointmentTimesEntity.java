@@ -22,6 +22,8 @@ public class AppointmentTimesEntity {
     private long id_Schedule;
     @Column(name = "horario")
     private LocalTime schedule;
+    @Column(name = "tempoatendimento")
+    private int serviceTime;
     @ManyToOne
     @JoinColumn(name = "id_servicos")
     private ServicesEntity servicesEntity;

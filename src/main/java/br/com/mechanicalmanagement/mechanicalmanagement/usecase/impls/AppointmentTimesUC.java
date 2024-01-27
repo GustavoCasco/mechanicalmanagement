@@ -3,10 +3,12 @@ package br.com.mechanicalmanagement.mechanicalmanagement.usecase.impls;
 import br.com.mechanicalmanagement.mechanicalmanagement.adapters.database.entity.AppointmentTimesEntity;
 import br.com.mechanicalmanagement.mechanicalmanagement.adapters.database.entity.ServicesEntity;
 import br.com.mechanicalmanagement.mechanicalmanagement.adapters.database.repository.AppointmentTimesRepository;
+import br.com.mechanicalmanagement.mechanicalmanagement.adapters.database.repository.SchedulingServicesRepository;
 import br.com.mechanicalmanagement.mechanicalmanagement.adapters.database.repository.ServicesRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.sql.Date;
 import java.time.LocalTime;
 import java.util.HashSet;
 import java.util.List;
@@ -17,18 +19,23 @@ import static org.apache.commons.lang3.StringUtils.leftPad;
 
 @Service
 @RequiredArgsConstructor
-public class ScheduleUC {
+public class AppointmentTimesUC {
 
     private final AppointmentTimesRepository appointmentTimesRepository;
     private final ServicesRepository servicesRepository;
+    private final SchedulingServicesRepository schedulingServicesRepository;
 
-    public void saveSchedule(String serviceName, LocalTime scheduleEnd, int totalServiceTime) {
+    public void saveAppointmentTimes(String serviceName, LocalTime scheduleEnd, int totalServiceTime) {
         servicesRepository.findByService(serviceName).ifPresent(service -> {
             appointmentTimesRepository.saveAll(createdTableSchedule(scheduleEnd, totalServiceTime, service.getId_Services()));
         });
     }
 
-    public List<LocalTime> findAllScheduleAvailable(String serviceName) {
+    public List<LocalTime> findAllScheduleAvailable(String serviceName, Date dateSchedule) {
+        var a = schedulingServicesRepository.findByDateSchedule(dateSchedule);
+
+        //TODO: PEGAR OBJETO DE AGENDAMENTO E FAZER A SEGUINTE VALIDAÇÃO:
+        // VERIFICAR SE OS HORARIOS DISPONIVEIS ESTÃO ENTRE O TERMINO E O INICIO DO AGENDAMENTO CASO SIM, REMOVER ESSE HORARIO
         return appointmentTimesRepository.findByServicesEntityService(serviceName)
                 .stream().map(AppointmentTimesEntity::getSchedule)
                 .collect(Collectors.toList());
@@ -45,6 +52,7 @@ public class ScheduleUC {
             hours = (valor - time) / 60;
             listAllScheduleForService.add(AppointmentTimesEntity.builder()
                     .servicesEntity(ServicesEntity.builder().id_Services(idService).build())
+                            .serviceTime(totalServiceTime)
                     .schedule(LocalTime.parse(leftPad(String.valueOf(hours), 2, "0")
                             .concat(":")
                             .concat(leftPad(String.valueOf(time), 2, "0"))))
