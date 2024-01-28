@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.util.List;
 import java.util.Set;
 
 import static org.springframework.http.ResponseEntity.ok;
@@ -18,7 +17,7 @@ import static org.springframework.http.ResponseEntity.ok;
 @RestController
 @RequestMapping(value = "/appointmentTimes")
 @RequiredArgsConstructor
-public class AppointmentTimes {
+public class AppointmentTimesController {
 
     private final AppointmentTimesUC appointmentTimesUC;
 
