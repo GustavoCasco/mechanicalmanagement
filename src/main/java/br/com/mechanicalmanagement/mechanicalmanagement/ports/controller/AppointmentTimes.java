@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
+import java.util.Set;
 
 import static org.springframework.http.ResponseEntity.ok;
 
@@ -22,8 +23,8 @@ public class AppointmentTimes {
     private final AppointmentTimesUC appointmentTimesUC;
 
     @GetMapping("/listAppointmentTimeForService")
-    private ResponseEntity<List<LocalTime>> listAllAppointmentTimes(@RequestParam String serviceName,
-                                                                    @RequestParam LocalDate dateSchedule){
+    private ResponseEntity<Set<LocalTime>> listAllAppointmentTimes(@RequestParam String serviceName,
+                                                                   @RequestParam LocalDate dateSchedule){
         var listAllScheduleForService = appointmentTimesUC.findAllScheduleAvailable(serviceName, dateSchedule);
         return ok(listAllScheduleForService);
     }

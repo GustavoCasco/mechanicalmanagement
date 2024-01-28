@@ -22,12 +22,15 @@ public class AppointmentTimesUC {
     private final ServicesRepository servicesRepository;
     private final SchedulingServicesRepository schedulingServicesRepository;
     private HashMap<Integer, LocalTime> timeControl;
-    private List<LocalTime> filteredListAccordingAvailability;
+    private TreeSet<LocalTime> filteredListAccordingAvailability;
     private int count = 0;
 
     public void saveAppointmentTimes(String serviceName, LocalTime scheduleEnd, int totalServiceTime) {
         servicesRepository.findByService(serviceName).ifPresent(service -> {
-            appointmentTimesRepository.saveAll(createdTableSchedule(scheduleEnd, totalServiceTime, service.getIdServices()));
+            var isExists = appointmentTimesRepository.existsByServicesEntityService(serviceName);
+            if (!isExists){
+                appointmentTimesRepository.saveAll(createdTableSchedule(scheduleEnd, totalServiceTime, service.getIdServices()));
+            }
         });
     }
 
@@ -35,16 +38,15 @@ public class AppointmentTimesUC {
             return appointmentTimesRepository.findByServicesEntityIdServicesAndSchedule(id_Service, hours).get();
     }
 
-    public List<LocalTime> findAllScheduleAvailable(String serviceName, LocalDate dateSchedule) {
+    public TreeSet<LocalTime> findAllScheduleAvailable(String serviceName, LocalDate dateSchedule) {
         count = 0;
         timeControl =  new HashMap<>();
-        filteredListAccordingAvailability = new ArrayList<>();
+        filteredListAccordingAvailability = new TreeSet<>();
 
         var listScheduleForDate = schedulingServicesRepository.findByDateSchedule(dateSchedule);
         appointmentTimesRepository.findByServicesEntityService(serviceName)
                 .stream()
                 .map(AppointmentTimesEntity::getSchedule)
-                .sorted(LocalTime::compareTo)
                 .forEach(appointmentTime -> {
                     timeControl.put(count, appointmentTime);
                     if (!listScheduleForDate.isEmpty()){

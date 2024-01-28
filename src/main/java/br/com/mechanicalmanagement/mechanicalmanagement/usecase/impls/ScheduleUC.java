@@ -13,12 +13,18 @@ public class ScheduleUC {
     private final AppointmentTimesUC appointmentTimesUC;
 
     public void saveSchedule(ScheduleDTO scheduleDTO){
-        var a = appointmentTimesUC.findByHoursAndService(scheduleDTO.id_Service(), scheduleDTO.schedule());
-        schedulingServicesRepository.save(SchedulingServicesEntity.builder()
-                        .dateSchedule(scheduleDTO.dateSchedule())
-                        .id_User(scheduleDTO.id_User())
-                        .id_Services(scheduleDTO.id_Service())
-                        .timetable(a)
-                .build());
+        var timetable = appointmentTimesUC.findByHoursAndService(scheduleDTO.id_Service(), scheduleDTO.schedule());
+        var isExistsSchedule = schedulingServicesRepository
+                .existsByDateScheduleAndTimetableSchedule(scheduleDTO.dateSchedule(),
+                        scheduleDTO.schedule());
+        if(!isExistsSchedule){
+            schedulingServicesRepository.save(SchedulingServicesEntity.builder()
+                    .dateSchedule(scheduleDTO.dateSchedule())
+                    .id_User(scheduleDTO.id_User())
+                    .id_Services(scheduleDTO.id_Service())
+                    .timetable(timetable)
+                    .build());
+        }
+        //TODO: colocar uma exception com retorno 400 bad request
     }
 }
