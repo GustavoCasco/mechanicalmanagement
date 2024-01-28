@@ -18,7 +18,6 @@ public class ScheduleController {
 
     private final ScheduleUC scheduleImpl;
 
-    //TODO: FAZER VALIDAÇÃO PARA CASO JÁ EXISTA O AGENDAMENTO NAQUELA HORA
     @PostMapping("/saveSchedule")
     private ResponseEntity<String> saveSchedule(@RequestBody ScheduleDTO scheduleDTO) {
         scheduleImpl.saveSchedule(scheduleDTO);
