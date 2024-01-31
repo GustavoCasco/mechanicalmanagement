@@ -5,8 +5,11 @@ import br.com.mechanicalmanagement.mechanicalmanagement.adapters.database.entity
 import br.com.mechanicalmanagement.mechanicalmanagement.adapters.database.entity.UserEntity;
 import br.com.mechanicalmanagement.mechanicalmanagement.adapters.database.repository.UserRepository;
 import br.com.mechanicalmanagement.mechanicalmanagement.dtos.UserDTO;
+import br.com.mechanicalmanagement.mechanicalmanagement.exceptions.UserNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+
+import java.time.LocalDateTime;
 
 @Service
 @RequiredArgsConstructor
@@ -19,8 +22,7 @@ public class UserManagementUC {
         var isUserExists = userRepository.findByAccessControlEntityDocumentNumber(userDTO.documentNumber());
 
         if (isUserExists.isPresent()) {
-            //TODO: colocar uma exception com retorno 400 bad request mensagem: usuario existente
-            return;
+            throw new UserNotFoundException("Usuario já existe");
         }
 
         userRepository.save(UserEntity.builder()

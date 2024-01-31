@@ -3,6 +3,7 @@ package br.com.mechanicalmanagement.mechanicalmanagement.usecase.impls;
 import br.com.mechanicalmanagement.mechanicalmanagement.adapters.database.entity.SchedulingServicesEntity;
 import br.com.mechanicalmanagement.mechanicalmanagement.adapters.database.repository.SchedulingServicesRepository;
 import br.com.mechanicalmanagement.mechanicalmanagement.dtos.ScheduleDTO;
+import br.com.mechanicalmanagement.mechanicalmanagement.exceptions.ScheduleIsExistsException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -25,6 +26,9 @@ public class ScheduleUC {
                     .timetable(timetable)
                     .build());
         }
-        //TODO: colocar uma exception com retorno 400 bad request
+        else {
+            throw new ScheduleIsExistsException("Data já possui um agendamento");
+        }
+
     }
 }
