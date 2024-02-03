@@ -1,5 +1,6 @@
 package br.com.mechanicalmanagement.mechanicalmanagement.config;
 
+import br.com.mechanicalmanagement.mechanicalmanagement.adapters.database.aws.SecretsManagerService;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,9 +8,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import software.amazon.awssdk.services.secretsmanager.SecretsManagerClient;
-import software.amazon.awssdk.services.secretsmanager.model.GetSecretValueRequest;
-import software.amazon.awssdk.services.secretsmanager.model.GetSecretValueResponse;
-import software.amazon.awssdk.services.secretsmanager.model.SecretsManagerException;
 
 import javax.sql.DataSource;
 
@@ -28,21 +26,9 @@ public class DatabaseConfig {
         HikariConfig hikariConfig = new HikariConfig();
         hikariConfig.setDriverClassName("org.postgresql.Driver");
         hikariConfig.setJdbcUrl("jdbc:postgresql://localhost:5432/databasecasco");
-        hikariConfig.setUsername(getSecret(secretDtbaseUser));
-        hikariConfig.setPassword(getSecret(secretDtbasePwd));
+        hikariConfig.setUsername(SecretsManagerService.getValue(secretsManagerClient, secretDtbaseUser));
+        hikariConfig.setPassword(SecretsManagerService.getValue(secretsManagerClient, secretDtbasePwd));
         return new HikariDataSource(hikariConfig);
     }
 
-    private String getSecret(String secretName){
-        try {
-            GetSecretValueRequest valueRequest = GetSecretValueRequest.builder()
-                    .secretId(secretName)
-                    .build();
-            GetSecretValueResponse valueResponse = secretsManagerClient.getSecretValue(valueRequest);
-            return valueResponse.secretString();
-        } catch (SecretsManagerException e) {
-            System.err.println(e.awsErrorDetails().errorMessage());
-            throw new RuntimeException(e.awsErrorDetails().errorMessage());
-        }
-    }
 }

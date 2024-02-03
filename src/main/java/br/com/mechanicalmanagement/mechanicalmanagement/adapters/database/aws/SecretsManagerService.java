@@ -7,19 +7,17 @@ import software.amazon.awssdk.services.secretsmanager.model.SecretsManagerExcept
 
 public interface SecretsManagerService {
 
-    static void getValue(SecretsManagerClient secretsClient, String secretName) {
+    static String getValue(SecretsManagerClient secretsClient, String secretName) {
 
         try {
             GetSecretValueRequest valueRequest = GetSecretValueRequest.builder()
                     .secretId(secretName)
                     .build();
-
             GetSecretValueResponse valueResponse = secretsClient.getSecretValue(valueRequest);
-            String secret = valueResponse.secretString();
-            System.out.println(secret);
-
+            return valueResponse.secretString();
         } catch (SecretsManagerException e) {
             System.err.println(e.awsErrorDetails().errorMessage());
+            throw new RuntimeException(e.awsErrorDetails().errorMessage());
         }
     }
 }
