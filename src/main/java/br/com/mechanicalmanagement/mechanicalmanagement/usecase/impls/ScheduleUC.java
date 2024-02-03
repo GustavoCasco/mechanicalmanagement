@@ -51,6 +51,8 @@ public class ScheduleUC {
         return filteredListAccordingAvailability;
     }
 
+    //TODO: ADICIONAR UPDATE HORARIO E DATA DO AGENDAMENTO
+
     public void updateStatus(ScheduleDTO scheduleDTO) {
         schedulingServicesRepository.findByDateScheduleAndTimetableSchedule(scheduleDTO.dateSchedule(),
                 scheduleDTO.schedule()).ifPresent(schedulingServicesEntity -> {
