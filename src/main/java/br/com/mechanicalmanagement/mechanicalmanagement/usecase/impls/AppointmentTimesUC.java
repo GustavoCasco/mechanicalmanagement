@@ -3,14 +3,13 @@ package br.com.mechanicalmanagement.mechanicalmanagement.usecase.impls;
 import br.com.mechanicalmanagement.mechanicalmanagement.adapters.database.entity.AppointmentTimesEntity;
 import br.com.mechanicalmanagement.mechanicalmanagement.adapters.database.entity.ServicesEntity;
 import br.com.mechanicalmanagement.mechanicalmanagement.adapters.database.repository.AppointmentTimesRepository;
-import br.com.mechanicalmanagement.mechanicalmanagement.adapters.database.repository.SchedulingServicesRepository;
 import br.com.mechanicalmanagement.mechanicalmanagement.adapters.database.repository.ServicesRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
 import java.time.LocalTime;
-import java.util.*;
+import java.util.HashSet;
+import java.util.Set;
 
 import static org.apache.commons.lang3.StringUtils.leftPad;
 
@@ -20,49 +19,18 @@ public class AppointmentTimesUC {
 
     private final AppointmentTimesRepository appointmentTimesRepository;
     private final ServicesRepository servicesRepository;
-    private final SchedulingServicesRepository schedulingServicesRepository;
-    private HashMap<Integer, LocalTime> timeControl;
-    private TreeSet<LocalTime> filteredListAccordingAvailability;
-    private int count = 0;
 
     public void saveAppointmentTimes(String serviceName, LocalTime scheduleEnd, int totalServiceTime) {
         servicesRepository.findByService(serviceName).ifPresent(service -> {
             var isExists = appointmentTimesRepository.existsByServicesEntityService(serviceName);
-            if (!isExists){
+            if (!isExists) {
                 appointmentTimesRepository.saveAll(createdTableSchedule(scheduleEnd, totalServiceTime, service.getIdServices()));
             }
         });
     }
 
-    public AppointmentTimesEntity findByHoursAndService(Long id_Service, LocalTime hours){
-            return appointmentTimesRepository.findByServicesEntityIdServicesAndSchedule(id_Service, hours).get();
-    }
-
-    public TreeSet<LocalTime> findAllScheduleAvailable(String serviceName, LocalDate dateSchedule) {
-        count = 0;
-        timeControl =  new HashMap<>();
-        filteredListAccordingAvailability = new TreeSet<>();
-
-        var listScheduleForDate = schedulingServicesRepository.findByDateSchedule(dateSchedule);
-        appointmentTimesRepository.findByServicesEntityService(serviceName)
-                .stream()
-                .map(AppointmentTimesEntity::getSchedule)
-                .forEach(appointmentTime -> {
-                    timeControl.put(count, appointmentTime);
-                    if (!listScheduleForDate.isEmpty()){
-                        listScheduleForDate.forEach(schedule -> {
-                            if ((timeControl.get(count == 0 ? 0 : count - 1).isBefore(schedule.getTimetable().getSchedule())
-                                    && appointmentTime.getHour() < schedule.getTimetable().getSchedule().getHour())
-                                    != appointmentTime.isAfter(schedule.getTimetable().getSchedule())){
-                                filteredListAccordingAvailability.add(appointmentTime);
-                            }
-                        });
-                    }else {
-                        filteredListAccordingAvailability.add(appointmentTime);
-                    }
-                    count++;
-                });
-        return filteredListAccordingAvailability;
+    public AppointmentTimesEntity findByHoursAndService(Long id_Service, LocalTime hours) {
+        return appointmentTimesRepository.findByServicesEntityIdServicesAndSchedule(id_Service, hours).get();
     }
 
     private Set<AppointmentTimesEntity> createdTableSchedule(LocalTime scheduleEnd, int totalServiceTime, long idService) {
@@ -76,7 +44,7 @@ public class AppointmentTimesUC {
             hours = (valor - time) / 60;
             listAllScheduleForService.add(AppointmentTimesEntity.builder()
                     .servicesEntity(ServicesEntity.builder().idServices(idService).build())
-                            .serviceTime(totalServiceTime)
+                    .serviceTime(totalServiceTime)
                     .schedule(LocalTime.parse(leftPad(String.valueOf(hours), 2, "0")
                             .concat(":")
                             .concat(leftPad(String.valueOf(time), 2, "0"))))

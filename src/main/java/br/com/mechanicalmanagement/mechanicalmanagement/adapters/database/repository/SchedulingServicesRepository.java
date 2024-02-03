@@ -12,5 +12,7 @@ import java.util.Optional;
 @Repository
 public interface SchedulingServicesRepository extends JpaRepository<SchedulingServicesEntity, Long> {
     List<SchedulingServicesEntity> findByDateSchedule(LocalDate dateSchedule);
+
+    Optional<SchedulingServicesEntity> findByDateScheduleAndTimetableSchedule(LocalDate dateSchedule, LocalTime schedule);
     boolean existsByDateScheduleAndTimetableSchedule(LocalDate dateSchedule, LocalTime schedule);
 }

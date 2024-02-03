@@ -1,7 +1,6 @@
 package br.com.mechanicalmanagement.mechanicalmanagement.exceptions.handler;
 
 import br.com.mechanicalmanagement.mechanicalmanagement.exceptions.ScheduleIsExistsException;
-import br.com.mechanicalmanagement.mechanicalmanagement.exceptions.UserNotFoundException;
 import br.com.mechanicalmanagement.mechanicalmanagement.exceptions.dto.ReturnExceptionDTO;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;

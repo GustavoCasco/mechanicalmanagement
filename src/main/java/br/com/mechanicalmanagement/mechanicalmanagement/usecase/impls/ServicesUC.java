@@ -20,7 +20,7 @@ public class ServicesUC {
 
     private final ServicesRepository servicesRepository;
     private final PriceRepository priceRepository;
-    private final AppointmentTimesUC appointmentTimesUC;
+    private final ScheduleUC scheduleUC;
 
     public List<ServicesDTO> listAllServices(LocalDate dateSearch) {
         return servicesRepository.findAll().stream()
@@ -66,6 +66,6 @@ public class ServicesUC {
                 servicesEntity.getAppointmentTimes().stream().findFirst().get().getServiceTime(),
                 servicesEntity.getPriceEntity().getPrice(),
                 servicesEntity.getId_User().getIdUser(),
-                appointmentTimesUC.findAllScheduleAvailable(servicesEntity.getService(), dateSearch));
+                scheduleUC.findAllScheduleAvailable(servicesEntity.getService(), dateSearch));
     }
 }

@@ -1,1 +1,4 @@
-
+aws:
+  secrets:
+    dtbase-user: secret-user-dtbse
+    dtbase-pwd: secret-dtbse-pwd

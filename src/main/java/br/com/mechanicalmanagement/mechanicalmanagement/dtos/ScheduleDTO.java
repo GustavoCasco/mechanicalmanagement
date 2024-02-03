@@ -1,14 +1,15 @@
 package br.com.mechanicalmanagement.mechanicalmanagement.dtos;
 
-import lombok.Builder;
-import lombok.Getter;
+import com.fasterxml.jackson.annotation.JsonInclude;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
 
-
-public record ScheduleDTO(LocalDate dateSchedule,
-                          long id_User,
-                          long id_Service,
-                          LocalTime schedule) {
+@JsonInclude(JsonInclude.Include.NON_NULL)
+public record ScheduleDTO(
+        LocalDate dateSchedule,
+        long id_User,
+        long id_Service,
+        long id_status,
+        LocalTime schedule) {
 }
