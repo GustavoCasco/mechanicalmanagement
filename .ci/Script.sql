@@ -51,15 +51,23 @@ id_servicos bigint not null,
 constraint fk_servicos foreign key (id_servicos) references tbhg_servicos(id_servicos)
 );
 
+create table tbhg_status (
+id_status SERIAL primary key not null,
+status varchar(255) not null
+);
+
 create table tbhg_agendamentos (
 id_agendamentos SERIAL primary key not null,
 dataAgendamento date default current_date,
+id_status bigint not null,
 id_usuario bigint not null,
 id_servicos bigint not null,
 id_horario bigint not null,
 constraint fk_usuario foreign key (id_usuario) references tbhg_usuario(id_usuario),
 constraint fk_horario foreign key (id_horario) references tbhg_horarios(id_horario),
+constraint fk_status foreign key (id_status) references tbhg_status(id_status),
 constraint fk_servicos foreign key (id_servicos) references tbhg_servicos(id_servicos)
 );
 
 insert into tbhg_tipo_usuario values (1, 'COMUM'), (2, 'ADM'), (3, 'FUNCIONARIO');
+insert into tbhg_status values (1, 'ABERTO'), (2, 'EM ANDAMENTO'), (3, 'FINALIZADO');
