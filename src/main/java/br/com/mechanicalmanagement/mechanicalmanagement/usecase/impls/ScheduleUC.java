@@ -57,15 +57,6 @@ public class ScheduleUC {
             if (scheduleDTO.id_status() != 0) {
                 schedulingServicesEntity.setId_status(scheduleDTO.id_status());
             }
-
-            if (scheduleDTO.dateSchedule() != schedulingServicesEntity.getDateSchedule()) {
-                schedulingServicesEntity.setDateSchedule(scheduleDTO.dateSchedule());
-            }
-
-            if (scheduleDTO.schedule() != schedulingServicesEntity.getTimetable().getSchedule()) {
-                var timetable = appointmentTimesUC.findByHoursAndService(scheduleDTO.id_Service(), scheduleDTO.schedule());
-                schedulingServicesEntity.getTimetable().setIdSchedule(timetable.getIdSchedule());
-            }
             schedulingServicesRepository.save(schedulingServicesEntity);
         });
     }
